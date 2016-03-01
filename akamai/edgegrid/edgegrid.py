@@ -20,9 +20,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import requests
+##modified for https://github.com/abshkd/nene
+
 import logging
-import uuid
 import hashlib
 import hmac
 import base64
@@ -30,6 +30,7 @@ import re
 import sys
 from requests.auth import AuthBase
 from time import gmtime, strftime
+from os import urandom
 
 if sys.version_info[0] >= 3:
     # python3
@@ -48,7 +49,7 @@ def eg_timestamp():
     return strftime('%Y%m%dT%H:%M:%S+0000', gmtime())
 
 def new_nonce():
-    return uuid.uuid4()
+    return lambda length: filter(lambda s: s.isalpha(), base64.b64encode(urandom(length * 2)))[:length]
 
 def base64_hmac_sha256(data, key):
     return base64.b64encode(
